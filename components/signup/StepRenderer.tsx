@@ -13,6 +13,7 @@ import {
   CreatorVerification,
   CreatorContact,
   Role,
+  BusinessForm
 } from "./SignupLayout";
 
 export default function StepRenderer({
@@ -27,6 +28,8 @@ export default function StepRenderer({
   creatorContact,
   setCreatorContact,
   finish,
+  businessForm,
+  setBusinessForm
 }: {
   role: Role;
   step: number;
@@ -39,6 +42,8 @@ export default function StepRenderer({
   creatorContact: CreatorContact;
   setCreatorContact: (v: CreatorContact) => void;
   finish: () => void;
+  businessForm:BusinessForm,
+  setBusinessForm: (v: BusinessForm) => void;
 }) {
   if (role === "creator") {
     if (step === 1)
@@ -103,7 +108,10 @@ export default function StepRenderer({
   }
   if(role === "business"){
     if(step === 1){
-      return <BusinessStep1 onNext={onNext}/>
+      return <BusinessStep1 
+      values={businessForm}
+        onChange={setBusinessForm}
+      onNext={onNext}/>
     }
   }
 

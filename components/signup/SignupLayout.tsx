@@ -25,6 +25,15 @@ export type CreatorVerification = {
   previewUrl?: string;
 };
 
+export type BusinessForm = {
+  businessName: string;
+  legalName: string;
+  businessType: string;
+  category: string;
+  ownerName: string;
+  phone: string;
+};
+
 export default function SignupLayout() {
   const [role, setRole] = useState<Role>("creator");
   const [step, setStep] = useState(1);
@@ -43,6 +52,15 @@ export default function SignupLayout() {
     email: "",
     phone: "",
   });
+
+  const [businessForm, setBusinessForm] = useState<BusinessForm>({
+  businessName: "",
+  legalName: "",
+  businessType: "",
+  category: "",
+  ownerName: "",
+  phone: "",
+});
 
   const finish = async () => {
     if (!creatorVerification.file) {
@@ -115,17 +133,19 @@ export default function SignupLayout() {
             <Stepper step={step} total={6} />
 
             <StepRenderer
-               role={role}
-                step={step}
-                onNext={() => setStep((s) => s + 1)}
-                onPrev={() => setStep((s) => s - 1)}
-                creatorForm={creatorForm}
-                setCreatorForm={setCreatorForm}
-                creatorVerification={creatorVerification}
-                setCreatorVerification={setCreatorVerification}
-                creatorContact={creatorContact}
-                setCreatorContact={setCreatorContact}
-                finish={finish}
+              role={role}
+              step={step}
+              onNext={() => setStep((s) => s + 1)}
+              onPrev={() => setStep((s) => s - 1)}
+              creatorForm={creatorForm}
+              setCreatorForm={setCreatorForm}
+              creatorVerification={creatorVerification}
+              setCreatorVerification={setCreatorVerification}
+              creatorContact={creatorContact}
+              setCreatorContact={setCreatorContact}
+              businessForm={businessForm}
+              setBusinessForm={setBusinessForm}
+              finish={finish}
             />
           </div>
         </div>

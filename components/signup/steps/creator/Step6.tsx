@@ -30,6 +30,7 @@ export default function CreatorStep6({
   const [otp, setOtp] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
   const hasError = attempted && otp.length !== 6;
 
@@ -66,7 +67,7 @@ export default function CreatorStep6({
 
     try {
       await confirmation.confirm(otp);
-      onVerified();
+      setIsVerified(true); // ✅ only mark verified
     } catch {
       alert("Invalid OTP");
     }
@@ -137,16 +138,22 @@ export default function CreatorStep6({
           Previous
         </button>
 
-        <button
-          onClick={verifyOtp}
-          className="rounded bg-purple-600 px-10 py-3 text-white"
-        >
-          Verify
-        </button>
+        {!isVerified ? (
+          <button
+            onClick={verifyOtp}
+            className="rounded bg-purple-600 px-10 py-3 text-white"
+          >
+            Verify OTP
+          </button>
+        ) : (
+          <button
+            onClick={onVerified}
+            className="rounded bg-green-600 px-10 py-3 text-white"
+          >
+            Submit
+          </button>
+        )}
       </div>
-
-      {/* Required for Firebase */}
-     
     </div>
   );
 }

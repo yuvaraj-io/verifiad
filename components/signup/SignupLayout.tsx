@@ -102,6 +102,12 @@ export default function SignupLayout() {
     const [businessLiveVerification, setBusinessLiveVerification] =
   useState<BusinessLiveVerification>({});
     
+  const businessFinish = () => {
+    console.log(businessForm);
+    console.log(businessVerification);
+    console.log(businessLiveVerification);
+
+  }
 
   /* ---------- FINAL SUBMIT (CREATOR) ---------- */
   const finish = async () => {
@@ -173,7 +179,7 @@ export default function SignupLayout() {
               }}
             />
 
-            <Stepper step={step} total={6} />
+            <Stepper step={step} total={role === 'business'?  5 : 6} />
 
             <StepRenderer
               role={role}
@@ -192,8 +198,9 @@ export default function SignupLayout() {
               setBusinessVerification={setBusinessVerification}
               businessLiveVerification={businessLiveVerification}
               setBusinessLiveVerification={setBusinessLiveVerification}
-              
+              businessFinish={businessFinish}
               finish={finish}
+
             />
             <div id="recaptcha-container" />
           </div>

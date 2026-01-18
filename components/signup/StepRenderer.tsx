@@ -51,6 +51,7 @@ export default function StepRenderer({
   setBusinessLiveVerification,
 
   finish,
+  businessFinish
 }: {
   role: Role;
   step: number;
@@ -72,6 +73,7 @@ businessLiveVerification: BusinessLiveVerification;
 setBusinessLiveVerification: (v: BusinessLiveVerification) => void;
 
   finish: () => void;
+  businessFinish: () => void;
 }) {
   /* ================= CREATOR FLOW ================= */
   if (role === "creator") {
@@ -179,7 +181,7 @@ setBusinessLiveVerification: (v: BusinessLiveVerification) => void;
       <BusinessStep5
         value={businessLiveVerification}
         onChange={setBusinessLiveVerification}
-        onNext={onNext}
+        onNext={businessFinish}
         onPrev={onPrev}
       />
     );

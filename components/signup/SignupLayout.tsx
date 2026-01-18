@@ -32,6 +32,12 @@ export type BusinessForm = {
   category: string;
   ownerName: string;
   phone: string;
+
+  // Step 2
+  email: string;
+  address: string;
+  country: string;
+  website: string;
 };
 
 export default function SignupLayout() {
@@ -60,6 +66,11 @@ export default function SignupLayout() {
   category: "",
   ownerName: "",
   phone: "",
+
+  email: "",
+  address: "",
+  country: "",
+  website: "",
 });
 
   const finish = async () => {

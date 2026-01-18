@@ -43,6 +43,12 @@ export default function SignupLayout() {
     phone: "",
   });
 
+  const finish = () => {
+    console.log(creatorVerification);
+    console.log(creatorForm);
+    console.log(creatorContact);
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-400 px-6">
       <div className="grid min-h-[720px] w-full max-w-6xl grid-cols-[1fr_1.2fr]">
@@ -80,6 +86,8 @@ export default function SignupLayout() {
                 setCreatorVerification={setCreatorVerification}
                 creatorContact={creatorContact}
                 setCreatorContact={setCreatorContact}
+
+                finish={finish}
             />
           </div>
         </div>

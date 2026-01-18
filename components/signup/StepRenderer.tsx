@@ -24,6 +24,7 @@ export default function StepRenderer({
   setCreatorVerification,
   creatorContact,
   setCreatorContact,
+  finish,
 }: {
   role: Role;
   step: number;
@@ -35,6 +36,7 @@ export default function StepRenderer({
   setCreatorVerification: (v: CreatorVerification) => void;
   creatorContact: CreatorContact;
   setCreatorContact: (v: CreatorContact) => void;
+  finish: () => void;
 }) {
   if (role === "creator") {
     if (step === 1)
@@ -93,6 +95,7 @@ export default function StepRenderer({
       if (step === 7)
       return (
         <CreatorThankYou
+        onFinish={finish}
         />
       );
   }

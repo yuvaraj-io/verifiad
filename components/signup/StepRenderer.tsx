@@ -13,6 +13,7 @@ import CreatorThankYou from "./steps/creator/ThankYou";
 import BusinessStep1 from "./steps/business/Step1";
 import BusinessStep2 from "./steps/business/Step2";
 import BusinessStep3 from "./steps/business/Step3";
+import BusinessStep4 from "./steps/business/Step4";
 
 /* ----------- TYPES ----------- */
 import {
@@ -156,6 +157,15 @@ export default function StepRenderer({
           onPrev={onPrev}
         />
       );
+    
+    if (step === 4)
+    return (
+      <BusinessStep4
+        businessForm={businessForm}
+        onVerified={onNext}
+        onPrev={onPrev}
+      />
+    );
   }
 
   return <p className="text-gray-500">Step not implemented</p>;

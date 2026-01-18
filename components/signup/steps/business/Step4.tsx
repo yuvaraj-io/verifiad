@@ -1,49 +1,143 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  ConfirmationResult,
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { BusinessForm } from "../../SignupLayout";
+
 export default function BusinessStep4({
-  onNext,
+  businessForm,
+  onVerified,
+  onPrev,
 }: {
-  onNext: () => void;
+  businessForm: BusinessForm;
+  onVerified: () => void;
+  onPrev: () => void;
 }) {
+  const [confirmation, setConfirmation] =
+    useState<ConfirmationResult | null>(null);
+
+  const [otp, setOtp] = useState("");
+  const [attempted, setAttempted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const hasError = attempted && otp.length !== 6;
+
+  /* ---------- Setup Invisible reCAPTCHA ---------- */
+  useEffect(() => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        { size: "invisible" }
+      );
+    }
+  }, []);
+
+  /* ---------- Send OTP ---------- */
+  const sendOtp = async () => {
+    setLoading(true);
+    try {
+      const result = await signInWithPhoneNumber(
+        auth,
+        `+91${businessForm.phone}`,
+        window.recaptchaVerifier!
+      );
+      setConfirmation(result);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send OTP");
+    }
+    setLoading(false);
+  };
+
+  /* ---------- Verify OTP ---------- */
+  const verifyOtp = async () => {
+    setAttempted(true);
+    if (otp.length !== 6 || !confirmation) return;
+
+    try {
+      await confirmation.confirm(otp);
+      onVerified();
+    } catch {
+      alert("Invalid OTP");
+    }
+  };
+
   return (
     <div className="flex h-full flex-col justify-between">
       {/* Content */}
       <div className="space-y-12">
-        {/* Phone number */}
+        {/* Phone (disabled) */}
         <div>
           <label className="mb-2 block text-sm text-gray-700">
             Phone number
           </label>
           <input
             type="tel"
-            placeholder="Phone number"
-            className="w-full rounded border border-gray-400 px-4 py-3 text-sm outline-none"
+            value={businessForm.phone}
+            disabled
+            className="w-full cursor-not-allowed rounded border border-gray-300 bg-gray-100 px-4 py-3 text-sm"
           />
         </div>
 
         {/* OTP */}
         <div className="text-center">
-          <p className="mb-6 text-sm font-medium text-gray-700">OTP</p>
+          <p className="mb-4 text-sm font-medium text-gray-700">
+            Enter OTP
+          </p>
 
-          <div className="flex items-center justify-center gap-4">
-            <input className="h-14 w-14 rounded border border-gray-400 text-center text-lg outline-none" />
-            <span className="text-xl">–</span>
-            <input className="h-14 w-14 rounded border border-gray-400 text-center text-lg outline-none" />
-            <span className="text-xl">–</span>
-            <input className="h-14 w-14 rounded border border-gray-400 text-center text-lg outline-none" />
-            <span className="text-xl">–</span>
-            <input className="h-14 w-14 rounded border border-gray-400 text-center text-lg outline-none" />
-          </div>
+          <input
+            value={otp}
+            maxLength={6}
+            onChange={(e) =>
+              setOtp(e.target.value.replace(/\D/g, ""))
+            }
+            className={`h-14 w-48 rounded border text-center text-lg outline-none ${
+              hasError
+                ? "border-red-500"
+                : "border-gray-400"
+            }`}
+          />
+
+          {hasError && (
+            <p className="mt-2 text-sm text-red-500">
+              Enter a valid 6-digit OTP
+            </p>
+          )}
+
+          {!confirmation && (
+            <button
+              onClick={sendOtp}
+              disabled={loading}
+              className="mt-4 rounded border px-6 py-2 text-sm text-purple-600"
+            >
+              {loading ? "Sending..." : "Send OTP"}
+            </button>
+          )}
+
+          <div id="recaptcha-container"></div>
         </div>
       </div>
 
-      {/* Next Button */}
-      <div className="flex justify-end pt-10">
+      {/* Navigation */}
+      <div className="flex justify-between pt-10">
         <button
-          onClick={onNext}
+          onClick={onPrev}
+          className="rounded border border-gray-400 px-10 py-3 text-gray-700"
+        >
+          Previous
+        </button>
+
+        <button
+          onClick={verifyOtp}
           className="rounded bg-purple-600 px-10 py-3 text-white"
         >
-          Next
+          Verify & Continue
         </button>
       </div>
     </div>

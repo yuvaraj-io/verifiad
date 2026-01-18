@@ -5,6 +5,7 @@ import RoleToggle from "./RoleToggle";
 import Stepper from "./Stepper";
 import StepRenderer from "./StepRenderer";
 import LeftPanel from "./LeftPanel";
+import { getIdToken } from "@/lib/firebase";
 
 export type Role = "creator" | "business";
 
@@ -43,11 +44,49 @@ export default function SignupLayout() {
     phone: "",
   });
 
-  const finish = () => {
-    console.log(creatorVerification);
-    console.log(creatorForm);
-    console.log(creatorContact);
-  }
+  const finish = async () => {
+    if (!creatorVerification.file) {
+      alert("Please upload government ID");
+      return;
+    }
+
+    const token = await getIdToken();
+    if (!token) {
+      alert("Authentication failed");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", creatorForm.fullName);
+    formData.append("location", creatorForm.location);
+    formData.append("category", creatorForm.category);
+    formData.append("email", creatorContact.email);
+    formData.append("document", creatorVerification.file);
+
+    try {
+      const res = await fetch("/api/onboarding/creator", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Signup failed");
+        return;
+      }
+
+      console.log("Signup success");
+      // redirect to thank-you page
+    } catch (err) {
+      console.error(err);
+      alert("Network error");
+    }
+};
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-400 px-6">

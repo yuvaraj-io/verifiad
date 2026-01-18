@@ -7,8 +7,11 @@ import StepRenderer from "./StepRenderer";
 import LeftPanel from "./LeftPanel";
 import { getIdToken } from "@/lib/firebase";
 
+/* -------------------- TYPES -------------------- */
+
 export type Role = "creator" | "business";
 
+/* Creator */
 export type CreatorForm = {
   fullName: string;
   location: string;
@@ -25,6 +28,7 @@ export type CreatorVerification = {
   previewUrl?: string;
 };
 
+/* Business */
 export type BusinessForm = {
   businessName: string;
   legalName: string;
@@ -33,17 +37,28 @@ export type BusinessForm = {
   ownerName: string;
   phone: string;
 
-  // Step 2
   email: string;
   address: string;
   country: string;
   website: string;
 };
 
+export type BusinessVerification = {
+  gstNumber: string;
+  panNumber: string;
+  registrationCert?: File;
+  addressProof?: File;
+  fssai?: File;
+  ownerId?: File;
+};
+
+/* -------------------- COMPONENT -------------------- */
+
 export default function SignupLayout() {
   const [role, setRole] = useState<Role>("creator");
   const [step, setStep] = useState(1);
 
+  /* ---------- CREATOR STATE ---------- */
   const [creatorForm, setCreatorForm] = useState<CreatorForm>({
     fullName: "",
     location: "",
@@ -54,25 +69,33 @@ export default function SignupLayout() {
     useState<CreatorVerification>({});
 
   const [creatorContact, setCreatorContact] =
-  useState<CreatorContact>({
-    email: "",
-    phone: "",
-  });
+    useState<CreatorContact>({
+      email: "",
+      phone: "",
+    });
 
-  const [businessForm, setBusinessForm] = useState<BusinessForm>({
-  businessName: "",
-  legalName: "",
-  businessType: "",
-  category: "",
-  ownerName: "",
-  phone: "",
+  /* ---------- BUSINESS STATE ---------- */
+  const [businessForm, setBusinessForm] =
+    useState<BusinessForm>({
+      businessName: "",
+      legalName: "",
+      businessType: "",
+      category: "",
+      ownerName: "",
+      phone: "",
+      email: "",
+      address: "",
+      country: "",
+      website: "",
+    });
 
-  email: "",
-  address: "",
-  country: "",
-  website: "",
-});
+  const [businessVerification, setBusinessVerification] =
+    useState<BusinessVerification>({
+      gstNumber: "",
+      panNumber: "",
+    });
 
+  /* ---------- FINAL SUBMIT (CREATOR) ---------- */
   const finish = async () => {
     if (!creatorVerification.file) {
       alert("Please upload government ID");
@@ -108,14 +131,14 @@ export default function SignupLayout() {
         return;
       }
 
-      console.log("Signup success");
-      // redirect to thank-you page
+      console.log("Creator signup success");
     } catch (err) {
       console.error(err);
       alert("Network error");
     }
-};
+  };
 
+  /* -------------------- UI -------------------- */
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-400 px-6">
@@ -124,6 +147,7 @@ export default function SignupLayout() {
 
         <div className="flex items-center rounded-3xl bg-white">
           <div className="w-full px-14 py-12">
+            {/* Header */}
             <div className="mb-8 flex items-center gap-4">
               <div className="bg-black px-4 py-2 text-sm text-white">
                 Verifi<span className="text-purple-400">Ad.</span>
@@ -156,6 +180,8 @@ export default function SignupLayout() {
               setCreatorContact={setCreatorContact}
               businessForm={businessForm}
               setBusinessForm={setBusinessForm}
+              businessVerification={businessVerification}
+              setBusinessVerification={setBusinessVerification}
               finish={finish}
             />
           </div>

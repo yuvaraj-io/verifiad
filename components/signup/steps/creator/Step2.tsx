@@ -26,7 +26,7 @@ export default function CreatorStep2({
       <div>
         <div className="relative h-48 overflow-hidden rounded-lg">
           <img
-            src="/assets/sample-proof.jpg"
+            src="/assets/sample-proof.png"
             alt="Sample proof"
             className="h-full w-full object-cover"
           />

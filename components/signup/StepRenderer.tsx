@@ -5,7 +5,12 @@ import CreatorStep4 from "./steps/creator/Step4";
 import CreatorStep5 from "./steps/creator/Step5";
 import CreatorStep6 from "./steps/creator/Step6";
 import CreatorThankYou from "./steps/creator/ThankYou";
-// import BusinessStep1 from "./steps/business/Step1";
+import BusinessStep1 from "./steps/business/Step1";
+import BusinessStep2 from "./steps/business/Step2";
+import BusinessStep3 from "./steps/business/Step3";
+import BusinessStep4 from "./steps/business/Step4";
+import BusinessStep5 from "./steps/business/Step5";
+import BusinessThankYou from "./steps/business/Step6";
 
 export default function StepRenderer({
   role,
@@ -26,9 +31,14 @@ export default function StepRenderer({
     if (step === 7) return <CreatorThankYou />;
   }
 
-//   if (role === "business") {
-//     if (step === 1) return <BusinessStep1 onNext={onNext} />;
-//   }
+  if (role === "business") {
+    if (step === 1) return <BusinessStep1 onNext={onNext} />;
+    if (step === 2) return <BusinessStep2 onNext={onNext} />;
+    if (step === 3) return <BusinessStep3 onNext={onNext} />;
+    if (step === 4) return <BusinessStep4 onNext={onNext} />;
+    if (step === 5) return <BusinessStep5 onNext={onNext} />;
+    if (step === 6) return <BusinessThankYou/>;
+  }
 
   return <p>Step not implemented</p>;
 }

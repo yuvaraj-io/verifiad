@@ -1,6 +1,7 @@
 import CreatorStep1 from "./steps/creator/Step1";
 import CreatorStep2 from "./steps/creator/Step2";
 import CreatorStep3 from "./steps/creator/Step3";
+import CreatorStep4 from "./steps/creator/Step4";
 
 import {
   CreatorForm,
@@ -46,7 +47,7 @@ export default function StepRenderer({
           onPrev={onPrev}
         />
       );
-      
+
     if (step === 3)
       return (
         <CreatorStep3
@@ -54,6 +55,14 @@ export default function StepRenderer({
           onPrev={onPrev}
         />
       );
+    if (step === 4)
+      return (
+        <CreatorStep4
+          onNext={onNext}
+          onPrev={onPrev}
+        />
+      );
+    
   }
 
   return <p className="text-gray-500">Step not implemented</p>;

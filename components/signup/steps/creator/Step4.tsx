@@ -2,8 +2,10 @@
 
 export default function CreatorStep4({
   onNext,
+  onPrev,
 }: {
   onNext: () => void;
+  onPrev: () => void;
 }) {
   return (
     <div className="flex h-full flex-col justify-between">
@@ -31,8 +33,15 @@ export default function CreatorStep4({
         </ul>
       </div>
 
-      {/* Next Button */}
-      <div className="flex justify-end pt-10">
+      {/* Navigation */}
+      <div className="flex justify-between pt-10">
+        <button
+          onClick={onPrev}
+          className="rounded border border-gray-400 px-10 py-3 text-gray-700"
+        >
+          Previous
+        </button>
+
         <button
           onClick={onNext}
           className="rounded bg-purple-600 px-10 py-3 text-white"

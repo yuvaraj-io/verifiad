@@ -1,5 +1,6 @@
 import CreatorStep1 from "./steps/creator/Step1";
 import CreatorStep2 from "./steps/creator/Step2";
+import CreatorStep3 from "./steps/creator/Step3";
 
 import {
   CreatorForm,
@@ -41,6 +42,14 @@ export default function StepRenderer({
         <CreatorStep2
           value={creatorVerification}
           onChange={setCreatorVerification}
+          onNext={onNext}
+          onPrev={onPrev}
+        />
+      );
+      
+    if (step === 3)
+      return (
+        <CreatorStep3
           onNext={onNext}
           onPrev={onPrev}
         />

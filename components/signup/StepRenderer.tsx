@@ -3,6 +3,10 @@ import CreatorStep2 from "./steps/creator/Step2";
 import CreatorStep3 from "./steps/creator/Step3";
 import CreatorStep4 from "./steps/creator/Step4";
 import CreatorStep5 from "./steps/creator/Step5";
+import CreatorStep6 from "./steps/creator/Step6";
+import CreatorThankYou from "./steps/creator/ThankYou";
+
+import BusinessStep1 from "./steps/business/Step1";
 
 import {
   CreatorForm,
@@ -10,8 +14,6 @@ import {
   CreatorContact,
   Role,
 } from "./SignupLayout";
-import CreatorStep6 from "./steps/creator/Step6";
-import CreatorThankYou from "./steps/creator/ThankYou";
 
 export default function StepRenderer({
   role,
@@ -98,6 +100,11 @@ export default function StepRenderer({
         onFinish={finish}
         />
       );
+  }
+  if(role === "business"){
+    if(step === 1){
+      return <BusinessStep1 onNext={onNext}/>
+    }
   }
 
   return <p className="text-gray-500">Step not implemented</p>;

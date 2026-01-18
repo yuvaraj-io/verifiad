@@ -125,7 +125,6 @@ export default function SignupLayout() {
                 setCreatorVerification={setCreatorVerification}
                 creatorContact={creatorContact}
                 setCreatorContact={setCreatorContact}
-
                 finish={finish}
             />
           </div>

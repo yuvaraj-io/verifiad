@@ -14,6 +14,11 @@ export type CreatorForm = {
   category: string;
 };
 
+export type CreatorContact = {
+  email: string;
+  phone: string;
+};
+
 export type CreatorVerification = {
   file?: File;
   previewUrl?: string;
@@ -31,6 +36,12 @@ export default function SignupLayout() {
 
   const [creatorVerification, setCreatorVerification] =
     useState<CreatorVerification>({});
+
+  const [creatorContact, setCreatorContact] =
+  useState<CreatorContact>({
+    email: "",
+    phone: "",
+  });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-400 px-6">
@@ -59,14 +70,16 @@ export default function SignupLayout() {
             <Stepper step={step} total={6} />
 
             <StepRenderer
-              role={role}
-              step={step}
-              onNext={() => setStep((s) => s + 1)}
-              onPrev={() => setStep((s) => s - 1)}
-              creatorForm={creatorForm}
-              setCreatorForm={setCreatorForm}
-              creatorVerification={creatorVerification}
-              setCreatorVerification={setCreatorVerification}
+               role={role}
+                step={step}
+                onNext={() => setStep((s) => s + 1)}
+                onPrev={() => setStep((s) => s - 1)}
+                creatorForm={creatorForm}
+                setCreatorForm={setCreatorForm}
+                creatorVerification={creatorVerification}
+                setCreatorVerification={setCreatorVerification}
+                creatorContact={creatorContact}
+                setCreatorContact={setCreatorContact}
             />
           </div>
         </div>

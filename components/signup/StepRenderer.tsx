@@ -14,6 +14,7 @@ import BusinessStep1 from "./steps/business/Step1";
 import BusinessStep2 from "./steps/business/Step2";
 import BusinessStep3 from "./steps/business/Step3";
 import BusinessStep4 from "./steps/business/Step4";
+import BusinessStep5 from "./steps/business/Step5";
 
 /* ----------- TYPES ----------- */
 import {
@@ -23,7 +24,9 @@ import {
   CreatorContact,
   BusinessForm,
   BusinessVerification,
+  BusinessLiveVerification,
 } from "./SignupLayout";
+import BusinessThankYou from "./steps/business/Step6";
 
 /* ----------- COMPONENT ----------- */
 export default function StepRenderer({
@@ -44,6 +47,9 @@ export default function StepRenderer({
   businessVerification,
   setBusinessVerification,
 
+  businessLiveVerification,
+  setBusinessLiveVerification,
+
   finish,
 }: {
   role: Role;
@@ -62,6 +68,8 @@ export default function StepRenderer({
   setBusinessForm: (v: BusinessForm) => void;
   businessVerification: BusinessVerification;
   setBusinessVerification: (v: BusinessVerification) => void;
+businessLiveVerification: BusinessLiveVerification;
+setBusinessLiveVerification: (v: BusinessLiveVerification) => void;
 
   finish: () => void;
 }) {
@@ -166,6 +174,22 @@ export default function StepRenderer({
         onPrev={onPrev}
       />
     );
+    if (step === 5)
+    return (
+      <BusinessStep5
+        value={businessLiveVerification}
+        onChange={setBusinessLiveVerification}
+        onNext={onNext}
+        onPrev={onPrev}
+      />
+    );
+     if (step === 6)
+    return (
+      <BusinessThankYou
+      />
+    );
+
+
   }
 
   return <p className="text-gray-500">Step not implemented</p>;

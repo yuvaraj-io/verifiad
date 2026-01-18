@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  RecaptchaVerifier,
   signInWithPhoneNumber,
   ConfirmationResult,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { getRecaptchaVerifier } from "@/lib/recaptcha";
 import { BusinessForm } from "../../SignupLayout";
 
 export default function BusinessStep4({
@@ -20,39 +20,31 @@ export default function BusinessStep4({
 }) {
   const [confirmation, setConfirmation] =
     useState<ConfirmationResult | null>(null);
-
   const [otp, setOtp] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const hasError = attempted && otp.length !== 6;
 
-  /* ---------- Setup Invisible reCAPTCHA ---------- */
-  useEffect(() => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        { size: "invisible" }
-      );
-    }
-  }, []);
-
   /* ---------- Send OTP ---------- */
   const sendOtp = async () => {
     setLoading(true);
     try {
+      const verifier = getRecaptchaVerifier();
+
       const result = await signInWithPhoneNumber(
         auth,
         `+91${businessForm.phone}`,
-        window.recaptchaVerifier!
+        verifier
       );
+
       setConfirmation(result);
     } catch (err) {
       console.error(err);
       alert("Failed to send OTP");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   /* ---------- Verify OTP ---------- */
@@ -70,9 +62,8 @@ export default function BusinessStep4({
 
   return (
     <div className="flex h-full flex-col justify-between">
-      {/* Content */}
       <div className="space-y-12">
-        {/* Phone (disabled) */}
+        {/* Phone */}
         <div>
           <label className="mb-2 block text-sm text-gray-700">
             Phone number
@@ -119,8 +110,6 @@ export default function BusinessStep4({
               {loading ? "Sending..." : "Send OTP"}
             </button>
           )}
-
-          <div id="recaptcha-container"></div>
         </div>
       </div>
 

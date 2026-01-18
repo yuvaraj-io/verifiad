@@ -52,11 +52,15 @@ export type BusinessVerification = {
   ownerId?: File;
 };
 
+export type BusinessLiveVerification = {
+  placeImage?: File;
+};
+
 /* -------------------- COMPONENT -------------------- */
 
 export default function SignupLayout() {
-  const [role, setRole] = useState<Role>("creator");
-  const [step, setStep] = useState(1);
+  const [role, setRole] = useState<Role>("business");
+  const [step, setStep] = useState(5);
 
   /* ---------- CREATOR STATE ---------- */
   const [creatorForm, setCreatorForm] = useState<CreatorForm>({
@@ -82,7 +86,7 @@ export default function SignupLayout() {
       businessType: "",
       category: "",
       ownerName: "",
-      phone: "",
+      phone: "7204447908",
       email: "",
       address: "",
       country: "",
@@ -94,6 +98,10 @@ export default function SignupLayout() {
       gstNumber: "",
       panNumber: "",
     });
+
+    const [businessLiveVerification, setBusinessLiveVerification] =
+  useState<BusinessLiveVerification>({});
+    
 
   /* ---------- FINAL SUBMIT (CREATOR) ---------- */
   const finish = async () => {
@@ -182,8 +190,12 @@ export default function SignupLayout() {
               setBusinessForm={setBusinessForm}
               businessVerification={businessVerification}
               setBusinessVerification={setBusinessVerification}
+              businessLiveVerification={businessLiveVerification}
+              setBusinessLiveVerification={setBusinessLiveVerification}
+              
               finish={finish}
             />
+            <div id="recaptcha-container" />
           </div>
         </div>
       </div>

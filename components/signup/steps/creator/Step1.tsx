@@ -51,7 +51,7 @@ export default function CreatorStep1({
     }
 
     if (!values.location.trim()) {
-      e.location = "Country & City is required";
+      e.location = "Address is required";
     }
 
     if (!values.category) {
@@ -103,7 +103,7 @@ export default function CreatorStep1({
           className={`w-full rounded border p-2 ${
             showError("location") ? "border-red-500" : "border-gray-300"
           }`}
-          placeholder="Country & City"
+          placeholder="Address"
           value={values.location}
           onChange={(e) =>
             onChange({ ...values, location: e.target.value })

@@ -20,3 +20,13 @@ export const firebaseAdmin = admin;
 
 // Export default storage bucket
 export const bucket = admin.storage().bucket();
+
+
+export async function verifyIdToken(token: string) {
+  try {
+    return await admin.auth().verifyIdToken(token);
+  } catch (error) {
+    console.error("Firebase token verification failed", error);
+    return null;
+  }
+}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import AuthLayout from "@/components/auth/AuthLayout";
 import LoginFlow from "@/components/auth/LoginFlow";
 
-export default function LoginPage() {
+export default function LoginLayout() {
   const [role, setRole] =
     useState<"creator" | "business">("creator");
 

@@ -2,12 +2,16 @@
 
 import { useState, useEffect } from "react";
 import SignupLayout from "@/components/signup/SignupLayout";
+import LoginLayout from "@/components/signup/LoginLayout";
 import Modal from "@/components/ui/Modal";
+
+type AuthMode = "login" | "signup";
 
 export default function HomeHero() {
   const [open, setOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<AuthMode>("signup");
 
-  /* Optional: ESC key support */
+  /* ESC key support */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -26,21 +30,33 @@ export default function HomeHero() {
         }}
       >
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-10">
-          {/* Header */}
+          {/* ---------- HEADER ---------- */}
           <header className="flex items-center justify-between">
-            <img src="/assets/logo.png" />
+            <img src="/assets/logo.png" alt="VerifiAd" />
 
             <nav className="flex items-center gap-10 text-white">
-              <a className="relative font-medium">
+              <a className="relative font-medium cursor-pointer">
                 Home
                 <span className="absolute -bottom-2 left-0 h-1 w-full rounded bg-sky-400" />
               </a>
-              <a className="opacity-80 hover:opacity-100">Who we are</a>
-              <a className="opacity-80 hover:opacity-100">Log in</a>
+
+              <a className="opacity-80 hover:opacity-100 cursor-pointer">
+                Who we are
+              </a>
+
+              <a
+                className="opacity-80 hover:opacity-100 cursor-pointer"
+                onClick={() => {
+                  setAuthMode("login");
+                  setOpen(true);
+                }}
+              >
+                Log in
+              </a>
             </nav>
           </header>
 
-          {/* Hero content */}
+          {/* ---------- HERO CONTENT ---------- */}
           <div className="mt-24 grid grid-cols-1 items-center gap-16 md:grid-cols-2">
             <div className="text-white">
               <h1 className="text-4xl font-light leading-tight md:text-5xl">
@@ -54,7 +70,10 @@ export default function HomeHero() {
               </p>
 
               <button
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  setAuthMode("signup");
+                  setOpen(true);
+                }}
                 className="mt-10 rounded-full bg-white px-8 py-4 text-sm font-medium text-black transition hover:bg-gray-200"
               >
                 Create Account
@@ -64,9 +83,13 @@ export default function HomeHero() {
         </div>
       </section>
 
-      {/* ---------- SIGNUP MODAL ---------- */}
+      {/* ---------- AUTH MODAL ---------- */}
       <Modal open={open} onClose={() => setOpen(false)}>
-        <SignupLayout />
+        {authMode === "signup" ? (
+          <SignupLayout />
+        ) : (
+          <LoginLayout />
+        )}
       </Modal>
     </>
   );

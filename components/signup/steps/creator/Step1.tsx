@@ -13,6 +13,21 @@ type Touched = {
   category?: boolean;
 };
 
+const PRIMARY_CONTENT_CATEGORIES = [
+  "Digital & Online",
+  "Business & Commerce",
+  "Food & Lifestyle",
+  "Fashion & Beauty",
+  "Media & Entertainment",
+  "Health & Fitness",
+  "Professional Services",
+  "Real Estate & Infrastructure",
+  "Travel & Hospitality",
+  "Gaming & Tech",
+  "Education & Institutions",
+  "Other",
+];
+
 export default function CreatorStep1({
   values,
   onChange,
@@ -25,6 +40,7 @@ export default function CreatorStep1({
   const [touched, setTouched] = useState<Touched>({});
   const [submitted, setSubmitted] = useState(false);
 
+  /* ---------- VALIDATION ---------- */
   const errors: Errors = useMemo(() => {
     const e: Errors = {};
 
@@ -38,7 +54,7 @@ export default function CreatorStep1({
       e.location = "Country & City is required";
     }
 
-    if (!values.category.trim()) {
+    if (!values.category) {
       e.category = "Primary category is required";
     }
 
@@ -56,15 +72,14 @@ export default function CreatorStep1({
     onNext();
   };
 
+  /* ---------- UI ---------- */
   return (
     <div className="space-y-4">
       {/* Full name */}
       <div>
         <input
           className={`w-full rounded border p-2 ${
-            showError("fullName")
-              ? "border-red-500"
-              : "border-gray-300"
+            showError("fullName") ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Full name"
           value={values.fullName}
@@ -86,9 +101,7 @@ export default function CreatorStep1({
       <div>
         <input
           className={`w-full rounded border p-2 ${
-            showError("location")
-              ? "border-red-500"
-              : "border-gray-300"
+            showError("location") ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Country & City"
           value={values.location}
@@ -106,29 +119,57 @@ export default function CreatorStep1({
         )}
       </div>
 
-      {/* Category */}
-      <div>
-        <input
-          className={`w-full rounded border p-2 ${
-            showError("category")
-              ? "border-red-500"
-              : "border-gray-300"
-          }`}
-          placeholder="Primary content category"
-          value={values.category}
-          onChange={(e) =>
-            onChange({ ...values, category: e.target.value })
-          }
-          onBlur={() =>
-            setTouched((t) => ({ ...t, category: true }))
-          }
-        />
-        {showError("category") && (
-          <p className="mt-1 text-sm text-red-500">
-            {errors.category}
-          </p>
-        )}
+      {/* Category dropdown */}
+<div>
+  <div className="relative">
+    <select
+      className={`w-full appearance-none rounded border bg-white px-3 py-2 pr-10 text-sm text-gray-900 focus:outline-none focus:ring-2 ${
+        showError("category")
+          ? "border-red-500 focus:ring-red-200"
+          : "border-gray-300 focus:border-purple-500 focus:ring-purple-200"
+      }`}
+      value={values.category}
+      onChange={(e) =>
+        onChange({ ...values, category: e.target.value })
+      }
+      onBlur={() =>
+        setTouched((t) => ({ ...t, category: true }))
+      }
+    >
+      <option value="" disabled className="text-gray-400">
+        Select primary content category
+      </option>
+
+      {PRIMARY_CONTENT_CATEGORIES.map((cat) => (
+        <option key={cat} value={cat}>
+          {cat}
+        </option>
+      ))}
+    </select>
+
+    {/* Custom dropdown arrow */}
+    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
+        <svg
+          className="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clipRule="evenodd"
+          />
+        </svg>
       </div>
+    </div>
+
+    {showError("category") && (
+      <p className="mt-1 text-sm text-red-500">
+        {errors.category}
+      </p>
+    )}
+  </div>
+
 
       {/* Button */}
       <button

@@ -10,11 +10,11 @@ export default function CreatorStep3({
   onPrev: () => void;
 }) {
   const [checks, setChecks] = useState({
-    c1: false,
-    c2: false,
-    c3: false,
-    c4: false,
-    c5: false,
+    c1: true,
+    c2: true,
+    c3: true,
+    c4: true,
+    c5: true,
   });
 
   const [attempted, setAttempted] = useState(false);

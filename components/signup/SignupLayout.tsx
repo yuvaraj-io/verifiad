@@ -59,7 +59,7 @@ export type BusinessLiveVerification = {
 /* -------------------- COMPONENT -------------------- */
 
 export default function SignupLayout() {
-  const [role, setRole] = useState<Role>("business");
+  const [role, setRole] = useState<Role>("creator");
   const [step, setStep] = useState(1);
 
   /* ---------- CREATOR STATE ---------- */

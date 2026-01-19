@@ -155,8 +155,8 @@ export default function SignupLayout() {
   /* -------------------- UI -------------------- */
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-400 px-6">
-      <div className="grid min-h-[720px] w-full max-w-6xl grid-cols-[1fr_1.2fr]">
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="grid min-h-[720px] w-full grid-cols-[1fr_1.2fr]">
         <LeftPanel role={role} />
 
         <div className="flex items-center rounded-3xl bg-white">

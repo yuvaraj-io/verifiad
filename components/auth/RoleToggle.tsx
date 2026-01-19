@@ -1,4 +1,4 @@
-import { Role } from "./SignupLayout";
+import { Role } from "../signup/SignupLayout";
 import { Video, Briefcase } from "lucide-react";
 
 export default function RoleToggle({

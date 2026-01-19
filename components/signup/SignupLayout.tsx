@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import RoleToggle from "./RoleToggle";
+import RoleToggle from "../auth/RoleToggle";
 import Stepper from "./Stepper";
 import StepRenderer from "./StepRenderer";
-import LeftPanel from "./LeftPanel";
+import LeftPanel from "../auth/LeftPanel";
 import { getIdToken } from "@/lib/firebase";
 
 /* -------------------- TYPES -------------------- */
@@ -102,12 +102,98 @@ export default function SignupLayout() {
     const [businessLiveVerification, setBusinessLiveVerification] =
   useState<BusinessLiveVerification>({});
     
-  const businessFinish = () => {
-    console.log(businessForm);
-    console.log(businessVerification);
-    console.log(businessLiveVerification);
+  const businessFinish = async () => {
+    /* ---------- BASIC CHECK ---------- */
+    if (!businessLiveVerification.placeImage) {
+      alert("Please capture business place image");
+      return;
+    }
 
-  }
+    const token = await getIdToken();
+    if (!token) {
+      alert("Authentication failed");
+      return;
+    }
+
+    /* ---------- BUILD FORM DATA ---------- */
+    const formData = new FormData();
+
+    // Step 1 – Business info
+    formData.append("businessName", businessForm.businessName);
+    formData.append("businessType", businessForm.businessType);
+    formData.append("category", businessForm.category);
+    formData.append("ownerName", businessForm.ownerName);
+    formData.append("phone", businessForm.phone);
+
+    // Step 2 – Contact & address
+    formData.append("email", businessForm.email);
+    formData.append("website", businessForm.website);
+    formData.append("address", businessForm.address);
+    formData.append("country", businessForm.country);
+
+    // Step 3 – Verification numbers
+    formData.append("gstNumber", businessVerification.gstNumber);
+    formData.append("panNumber", businessVerification.panNumber);
+
+    // Step 3 – Documents
+    if (businessVerification.registrationCert)
+      formData.append(
+        "registrationCert",
+        businessVerification.registrationCert
+      );
+
+    if (businessVerification.addressProof)
+      formData.append(
+        "addressProof",
+        businessVerification.addressProof
+      );
+
+    if (businessVerification.ownerId)
+      formData.append(
+        "ownerId",
+        businessVerification.ownerId
+      );
+
+    if (businessVerification.fssai)
+      formData.append(
+        "fssai",
+        businessVerification.fssai
+      );
+
+    // Step 5 – Live verification
+    formData.append(
+      "placeImage",
+      businessLiveVerification.placeImage
+    );
+
+    /* ---------- API CALL ---------- */
+    try {
+      const res = await fetch("/api/onboarding/business", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Business onboarding failed");
+        return;
+      }
+
+      console.log("✅ Business onboarding success");
+
+      // TODO: redirect to dashboard
+      // router.push("/business/dashboard");
+
+    } catch (err) {
+      console.error(err);
+      alert("Network error");
+    }
+  };
+
 
   /* ---------- FINAL SUBMIT (CREATOR) ---------- */
   const finish = async () => {

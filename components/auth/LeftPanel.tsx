@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Role } from "./SignupLayout";
+import { Role } from "../signup/SignupLayout";
 
 export default function LeftPanel({ role }: { role: Role }) {
   return (

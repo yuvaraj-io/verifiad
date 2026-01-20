@@ -9,7 +9,7 @@ const redRose = Red_Rose({
 });
 
 type LogoProps = {
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
 };
 
@@ -18,6 +18,7 @@ export default function VirifiAdLogo({
   className,
 }: LogoProps) {
   const sizeConfig = {
+    xs:{ text: "text-2xl", padding: "px-2 py-1", width: "w-[120px]" },
     sm: { text: "text-3xl", padding: "px-4 py-2", width: "w-[180px]" },
     md: { text: "text-5xl", padding: "px-6 py-3", width: "w-[260px]" },
     lg: { text: "text-7xl", padding: "px-8 py-4", width: "w-[360px]" },

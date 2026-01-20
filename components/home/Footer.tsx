@@ -7,6 +7,7 @@ import {
   Linkedin,
   Briefcase,
 } from "lucide-react";
+import VirifiAdLogo from "../branding/VirifiAdLogo";
 
 export default function Footer() {
   return (
@@ -14,12 +15,7 @@ export default function Footer() {
       {/* Top bar */}
       <div className="flex items-center justify-between px-10 py-4">
         {/* Logo */}
-        <Image
-          src="/assets/logo.png"
-          alt="VirifiAd logo"
-          width={120}
-          height={40}
-        />
+        <VirifiAdLogo size="xs"/>
 
         <h2 className="text-xl font-medium text-gray-800">
           Sign in as businesses
@@ -41,20 +37,11 @@ export default function Footer() {
             Download VirifiAd app now
           </p>
 
-          <div className="flex gap-3">
-            <Image
-              src="/assets/google-play.png"
-              alt="Google Play"
-              width={130}
-              height={40}
-            />
-            <Image
-              src="/assets/app-store.png"
-              alt="App Store"
-              width={130}
-              height={40}
-            />
-          </div>
+          <div className="mt-4 flex gap-4 ">
+              <img src="/assets/icons/google_play.svg" />
+              <img src="/assets/icons/app_store.svg" />
+              <img />
+            </div>
         </div>
 
         {/* Column 2 */}

@@ -62,7 +62,7 @@ export default function VerifiedAds() {
                 {/* Verified badge */}
                 <div className="absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1 text-sm text-white">
                   Verified
-                  <span className="h-4 w-4 rounded-full bg-blue-500" />
+                 <img width="20px" src="/assets/homepage/verify.png" />
                 </div>
               </div>
 

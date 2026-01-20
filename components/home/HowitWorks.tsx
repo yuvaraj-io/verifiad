@@ -8,13 +8,15 @@ export default function HowItWorks() {
             {/* <div className="h-[720px] w-[360px] rounded-[44px] border-4 border-black bg-white" /> */}
 
             <img src="./assets/howWorks.png" />
-            <p className="mt-6 text-center text-gray-600">
-              Download VirifiAd app now
-            </p>
+            
 
-            <div className="mt-4 flex gap-4">
-              <div className="h-10 w-32 rounded bg-black" />
-              <div className="h-10 w-32 rounded bg-black" />
+            <div className="mt-4 flex gap-4 ">
+              <p className="text-center text-gray-600">
+                Download VirifiAd app now
+              </p>
+              <img src="/assets/icons/google_play.svg" />
+              <img src="/assets/icons/app_store.svg" />
+              <img />
             </div>
           </div>
 

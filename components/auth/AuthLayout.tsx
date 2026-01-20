@@ -1,5 +1,6 @@
 "use client";
 
+import VirifiAdLogo from "../branding/VirifiAdLogo";
 import LeftPanel from "./LeftPanel";
 import RoleToggle from "./RoleToggle";
 
@@ -25,9 +26,7 @@ export default function AuthLayout({
           <div className="w-full px-14 py-12">
             {/* Header */}
             <div className="mb-8 flex items-center gap-4">
-              <div className="bg-black px-4 py-2 text-sm text-white">
-                Verifi<span className="text-purple-400">Ad.</span>
-              </div>
+              <VirifiAdLogo />
               <h1 className="text-3xl font-semibold text-purple-500">
                 {title}
               </h1>

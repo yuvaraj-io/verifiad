@@ -1,19 +1,21 @@
+import Image from "next/image";
+
 const features = [
   {
     title: "100% Verified Advertisers",
-    icon: "📢",
+    icon: "/assets/homepage/advertize.png",
   },
   {
     title: "Only True Product Information",
-    icon: "✅",
+    icon: "/assets/homepage/community.png",
   },
   {
     title: "Community-Powered Ratings",
-    icon: "⭐",
+    icon: "/assets/homepage/verify.png",
   },
   {
     title: "Guaranteed Human Views",
-    icon: "👁️",
+    icon: "/assets/homepage/views.png",
   },
 ];
 
@@ -35,8 +37,18 @@ export default function WhyVerifiAd() {
         {/* Features */}
         <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4">
           {features.map((item) => (
-            <div key={item.title} className="flex flex-col items-center">
-              <div className="text-5xl">{item.icon}</div>
+            <div
+              key={item.title}
+              className="flex flex-col items-center"
+            >
+              <Image
+                src={item.icon}
+                alt={item.title}
+                width={64}
+                height={64}
+                className="object-contain"
+              />
+
               <p className="mt-4 text-sm font-medium text-gray-700 text-center">
                 {item.title}
               </p>

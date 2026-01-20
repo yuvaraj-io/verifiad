@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import SignupLayout from "@/components/signup/SignupLayout";
 import LoginLayout from "@/components/signup/LoginLayout";
 import Modal from "@/components/ui/Modal";
+import VirifiAdLogo from "../branding/VirifiAdLogo";
 
 type AuthMode = "login" | "signup";
 
@@ -32,9 +33,9 @@ export default function HomeHero() {
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-10">
           {/* ---------- HEADER ---------- */}
           <header className="flex items-center justify-between">
-            <img src="/assets/logo.png" alt="VerifiAd" />
+            <VirifiAdLogo />
 
-            <nav className="flex items-center gap-10 text-white">
+            <nav className="flex items-center gap-10 text-white text-lg ">
               <a className="relative font-medium cursor-pointer">
                 Home
                 <span className="absolute -bottom-2 left-0 h-1 w-full rounded bg-sky-400" />
@@ -57,7 +58,7 @@ export default function HomeHero() {
           </header>
 
           {/* ---------- HERO CONTENT ---------- */}
-          <div className="mt-24 grid grid-cols-1 items-center gap-16 md:grid-cols-2">
+          <div className="mt-40 grid grid-cols-1 items-center gap-16 md:grid-cols-2">
             <div className="text-white">
               <h1 className="text-4xl font-light leading-tight md:text-5xl">
                 Reach Real People <br />

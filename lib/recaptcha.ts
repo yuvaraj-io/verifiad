@@ -1,14 +1,11 @@
 import { RecaptchaVerifier } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "./firebase";
 
+let verifier: RecaptchaVerifier | null = null;
 
-/**
- * Returns a singleton invisible reCAPTCHA verifier.
- * Creates it once and reuses it across the app.
- */
-export function getRecaptchaVerifier(): RecaptchaVerifier {
-  if (!window.recaptchaVerifier) {
-    window.recaptchaVerifier = new RecaptchaVerifier(
+export function getRecaptchaVerifier() {
+  if (!verifier) {
+    verifier = new RecaptchaVerifier(
       auth,
       "recaptcha-container",
       {
@@ -16,6 +13,10 @@ export function getRecaptchaVerifier(): RecaptchaVerifier {
       }
     );
   }
+  return verifier;
+}
 
-  return window.recaptchaVerifier;
+export function clearRecaptcha() {
+  verifier?.clear();
+  verifier = null;
 }

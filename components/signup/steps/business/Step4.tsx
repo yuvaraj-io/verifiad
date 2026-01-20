@@ -6,7 +6,7 @@ import {
   ConfirmationResult,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { getRecaptchaVerifier } from "@/lib/recaptcha";
+import { getRecaptchaVerifier, clearRecaptcha } from "@/lib/recaptcha";
 import { BusinessForm } from "../../SignupLayout";
 
 export default function BusinessStep4({
@@ -26,7 +26,6 @@ export default function BusinessStep4({
 
   const hasError = attempted && otp.length !== 6;
 
-  /* ---------- Send OTP ---------- */
   const sendOtp = async () => {
     setLoading(true);
     try {
@@ -41,13 +40,13 @@ export default function BusinessStep4({
       setConfirmation(result);
     } catch (err) {
       console.error(err);
+      clearRecaptcha();
       alert("Failed to send OTP");
     } finally {
       setLoading(false);
     }
   };
 
-  /* ---------- Verify OTP ---------- */
   const verifyOtp = async () => {
     setAttempted(true);
     if (otp.length !== 6 || !confirmation) return;
@@ -56,6 +55,7 @@ export default function BusinessStep4({
       await confirmation.confirm(otp);
       onVerified();
     } catch {
+      clearRecaptcha();
       alert("Invalid OTP");
     }
   };
@@ -63,7 +63,6 @@ export default function BusinessStep4({
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="space-y-12">
-        {/* Phone */}
         <div>
           <label className="mb-2 block text-sm text-gray-700">
             Phone number
@@ -76,7 +75,6 @@ export default function BusinessStep4({
           />
         </div>
 
-        {/* OTP */}
         <div className="text-center">
           <p className="mb-4 text-sm font-medium text-gray-700">
             Enter OTP
@@ -113,7 +111,6 @@ export default function BusinessStep4({
         </div>
       </div>
 
-      {/* Navigation */}
       <div className="flex justify-between pt-10">
         <button
           onClick={onPrev}

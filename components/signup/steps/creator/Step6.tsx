@@ -1,19 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  RecaptchaVerifier,
   signInWithPhoneNumber,
   ConfirmationResult,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { getRecaptchaVerifier, clearRecaptcha } from "@/lib/recaptcha";
 import { CreatorContact } from "../../SignupLayout";
-
-declare global {
-  interface Window {
-    recaptchaVerifier: RecaptchaVerifier;
-  }
-}
 
 export default function CreatorStep6({
   contact,
@@ -26,7 +20,6 @@ export default function CreatorStep6({
 }) {
   const [confirmation, setConfirmation] =
     useState<ConfirmationResult | null>(null);
-
   const [otp, setOtp] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,50 +27,48 @@ export default function CreatorStep6({
 
   const hasError = attempted && otp.length !== 6;
 
-  // Setup reCAPTCHA once
-  useEffect(() => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        { size: "invisible" }
-      );
-    }
-  }, []);
-
+  /* ---------- SEND OTP ---------- */
   const sendOtp = async () => {
+    if (loading || confirmation) return;
+
     setLoading(true);
     try {
+      const verifier = getRecaptchaVerifier();
+
       const result = await signInWithPhoneNumber(
         auth,
         `+91${contact.phone}`,
-        window.recaptchaVerifier
+        verifier
       );
+
       setConfirmation(result);
     } catch (err) {
       console.error(err);
+      clearRecaptcha(); // 🔥 REQUIRED
       alert("Failed to send OTP");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
+  /* ---------- VERIFY OTP ---------- */
   const verifyOtp = async () => {
     setAttempted(true);
     if (otp.length !== 6 || !confirmation) return;
 
     try {
       await confirmation.confirm(otp);
-      setIsVerified(true); // ✅ only mark verified
+      setIsVerified(true);
     } catch {
+      clearRecaptcha(); // 🔥 REQUIRED
       alert("Invalid OTP");
     }
   };
 
   return (
     <div className="flex h-full flex-col justify-between">
-      {/* Content */}
       <div className="space-y-10">
-        {/* Phone (disabled) */}
+        {/* Phone */}
         <div>
           <label className="mb-2 block text-sm text-gray-700">
             Phone
@@ -98,10 +89,10 @@ export default function CreatorStep6({
 
           <input
             value={otp}
+            maxLength={6}
             onChange={(e) =>
               setOtp(e.target.value.replace(/\D/g, ""))
             }
-            maxLength={6}
             className={`h-14 w-48 rounded border text-center text-lg outline-none ${
               hasError
                 ? "border-red-500"
@@ -125,7 +116,8 @@ export default function CreatorStep6({
             </button>
           )}
 
-          <div id="recaptcha-container"></div>
+          {/* REQUIRED once in layout */}
+          <div id="recaptcha-container" />
         </div>
       </div>
 

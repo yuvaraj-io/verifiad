@@ -75,7 +75,7 @@ function Step({
   return (
     <div className="relative rounded-xl border border-gray-400 bg-white px-6 py-6">
       {/* Number */}
-      <div className="absolute -top-6 left-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#9b90b6] text-lg font-semibold text-white">
+      <div className="absolute -top-6 -left-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#9b90b6] text-lg font-semibold text-white">
         {number}
       </div>
 

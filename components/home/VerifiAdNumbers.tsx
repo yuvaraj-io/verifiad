@@ -14,13 +14,14 @@ const stats = [
 export default function VerifiAdNumbers() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [start, setStart] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setStart(true);
-          observer.disconnect(); // ✅ trigger only once
+          observer.disconnect(); // trigger only once
         }
       },
       { threshold: 0.4 }
@@ -33,13 +34,24 @@ export default function VerifiAdNumbers() {
     return () => observer.disconnect();
   }, []);
 
+  /* 🎉 Delay confetti until count animation completes */
+  useEffect(() => {
+    if (!start) return;
+
+    const timer = setTimeout(() => {
+      setShowConfetti(true);
+    }, 1200); // ⏱️ same as count duration
+
+    return () => clearTimeout(timer);
+  }, [start]);
+
   return (
     <section
       ref={sectionRef}
       className="relative bg-white py-28"
     >
-      {/* 🎉 Confetti plays only when visible */}
-      {start && <Confetti />}
+      {/* 🎉 Confetti AFTER count finishes */}
+      {showConfetti && <Confetti />}
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
         <h2 className="text-4xl font-medium text-gray-700">

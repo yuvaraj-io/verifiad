@@ -24,7 +24,7 @@ export default function WhyVerifiAd() {
     <section className="bg-white py-24">
       <div className="mx-auto max-w-7xl px-6 text-center">
         {/* Heading */}
-        <h2 className="text-3xl font-medium text-gray-800">
+        <h2 className="text-4xl font-medium text-gray-800">
           Why VerifiAd ?
         </h2>
 

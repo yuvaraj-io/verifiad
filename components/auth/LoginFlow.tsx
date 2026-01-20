@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { sendOtp } from "@/lib/firebase-utils";
 import { getIdToken } from "@/lib/firebase";
+import LoaderOverlay from "@/components/ui/LoaderOverlay";
+import OtpInput from "@/components/ui/OtpInput";
 
 export default function LoginFlow({
   role,
@@ -12,7 +14,7 @@ export default function LoginFlow({
 }) {
   const router = useRouter();
 
-  const [phone, setPhone] = useState(""); // only 10 digits
+  const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [confirmation, setConfirmation] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -26,8 +28,6 @@ export default function LoginFlow({
 
     try {
       setLoading(true);
-
-      // ✅ always prepend +91
       const result = await sendOtp(`+91${phone}`);
       setConfirmation(result);
     } catch {
@@ -56,7 +56,7 @@ export default function LoginFlow({
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ role }), // role intent
+        body: JSON.stringify({ role }),
       });
 
       const data = await res.json();
@@ -66,12 +66,11 @@ export default function LoginFlow({
         return;
       }
 
-      // ✅ Role-based redirect
-      if (data.role === "creator") {
-        router.push("/dashboard");
-      } else {
-        router.push("/business/dashboard");
-      }
+      router.push(
+        data.role === "creator"
+          ? "/dashboard"
+          : "/business/dashboard"
+      );
     } catch {
       alert("Invalid OTP");
     } finally {
@@ -79,56 +78,62 @@ export default function LoginFlow({
     }
   };
 
-  /* ---------- UI ---------- */
   return (
-    <div className="mt-8 space-y-6">
-      {!confirmation ? (
-        <>
-          {/* Phone input with +91 prefix */}
-          <div className="flex rounded-lg border overflow-hidden">
-            <span className="flex items-center bg-gray-100 px-3 text-sm text-gray-700">
-              +91
-            </span>
-            <input
-              className="flex-1 p-3 outline-none"
-              placeholder="XXXXXXXXXX"
-              maxLength={10}
-              value={phone}
-              onChange={(e) =>
-                setPhone(e.target.value.replace(/\D/g, ""))
-              }
+    <>
+      {/* 🔥 Popup Loader */}
+      <LoaderOverlay show={loading} />
+
+      <div className="mt-8 space-y-6">
+        {!confirmation ? (
+          <>
+            <div className="flex overflow-hidden rounded-lg border">
+              <span className="flex items-center bg-gray-100 px-3 text-sm">
+                +91
+              </span>
+              <input
+                className="flex-1 p-3 outline-none"
+                placeholder="XXXXXXXXXX"
+                maxLength={10}
+                disabled={loading}
+                value={phone}
+                onChange={(e) =>
+                  setPhone(e.target.value.replace(/\D/g, ""))
+                }
+              />
+            </div>
+
+            <button
+              onClick={requestOtp}
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 py-3 text-white disabled:opacity-70"
+            >
+              {loading && (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              )}
+              {loading ? "Sending OTP..." : "Send OTP"}
+            </button>
+          </>
+        ) : (
+          <>
+            <OtpInput
+              value={otp}
+              onChange={setOtp}
+              disabled={loading}
             />
-          </div>
 
-          <button
-            onClick={requestOtp}
-            disabled={loading}
-            className="w-full rounded-xl bg-purple-600 py-3 text-white"
-          >
-            {loading ? "Sending..." : "Send OTP"}
-          </button>
-        </>
-      ) : (
-        <>
-          <input
-            className="w-full rounded-lg border p-3 text-center tracking-widest"
-            placeholder="Enter OTP"
-            maxLength={6}
-            value={otp}
-            onChange={(e) =>
-              setOtp(e.target.value.replace(/\D/g, ""))
-            }
-          />
-
-          <button
-            onClick={verifyOtp}
-            disabled={loading}
-            className="w-full rounded-xl bg-purple-600 py-3 text-white"
-          >
-            Verify & Login
-          </button>
-        </>
-      )}
-    </div>
+            <button
+              onClick={verifyOtp}
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 py-3 text-white disabled:opacity-70"
+            >
+              {loading && (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              )}
+              {loading ? "Verifying..." : "Verify & Login"}
+            </button>
+          </>
+        )}
+      </div>
+    </>
   );
 }
